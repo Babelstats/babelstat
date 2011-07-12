@@ -38,8 +38,7 @@ run_query(Query, Filter, Callback) ->
 
 -spec result_to_proplist(#babelstat_series{}) ->
 				[term()].
-result_to_proplist(#babelstat_series{ dates = Dates,
-				      values = Values,
+result_to_proplist(#babelstat_series{ series = Series,
 				      metric = Metric,
 				      scale = Scale,
 				      frequency = Frequency,
@@ -51,6 +50,10 @@ result_to_proplist(#babelstat_series{ dates = Dates,
 				      title = Title,
 				      source = Source,
 				      legend = Legend }) ->
+    {Dates, Values} = lists:foldl(fun({Date,Value},Acc) ->
+					  {[Dates],[Values]} = Acc,
+					  {Dates++[Date],Values++[Value]}
+				  end,{[],[]},Series),
     [{dates, Dates},
      {values, Values},
      {metric, Metric},

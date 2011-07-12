@@ -19,8 +19,9 @@ eval(Algebra) ->
     {ok, Result} = calc_parser:parse(Ts),
     Result.
 
--spec calculate(Series :: [string()]) -> [float()].
+-spec calculate(Series :: [{calendar:t_datetime1970(),string()}]) -> [{calendar:t_datetime1970(),float()}].
 calculate(Series)->
-    lists:map(fun(X) ->
-		      babel_calc:eval(X)
+    lists:map(fun({Date,Algebra}) ->
+			 Result = babel_calc:eval(Algebra),
+			 {Date,Result}
 	      end, Series).

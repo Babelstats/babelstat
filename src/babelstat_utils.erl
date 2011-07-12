@@ -67,9 +67,10 @@ convert_docs_to_series(#babelstat_query{ category = Category,
 					      Value = lists:nth(Counter+1,Values),      
 					      NewValue =  convert_scale(DocScale, Scale, Value),
 					      Converted = convert_metric(DocMetric, Metric,NewValue),
-					      {NewValues++[Converted],Counter+1} 
+					      {NewValues++[{Doc#babelstat.date,Converted}],Counter+1} 
 		       end,{[],0},Docs),
-    #babelstat_series{dates = Dates, values = ConvertedValues, metric = Metric, scale = Scale, 
+
+    #babelstat_series{series = {Dates, ConvertedValues}, metric = Metric, scale = Scale, 
 		      frequency = Frequency, category = Category, sub_category = Sub_Category, 
 		      subject = Subject, series_category = Series_Category, title = Title, 
 		      legend = create_legend(Params,Filter)}.
@@ -88,15 +89,15 @@ create_constants_series(#babelstat_query{ category = Category,
 					   from_date = From,
 					   to_date = To} = Filter, Value, DocScale, DocMetric) ->
     DateList = dates:create_range(From, To, Frequency),
-    ConstantSeries = #babelstat_series{dates = DateList, metric = Metric, scale = Scale, frequency = Frequency,
+    ConstantSeries = #babelstat_series{metric = Metric, scale = Scale, frequency = Frequency,
 				      category = Category, sub_category = SubCategory, subject = Subject,
 				      series_category = SeriesCategory, title = Title, 
 				      legend = create_legend(Params,Filter)},
-    Values = lists:map(fun(_Date) ->
+    ValuesAndDates = lists:map(fun(Date) ->
 			       NewValue = convert_scale(DocScale, Scale, Value),
-			       convert_metric(DocMetric, Metric, NewValue)      
+			       {Date,convert_metric(DocMetric, Metric, NewValue)}
 		       end,DateList),
-    ConstantSeries#babelstat_series{values = Values}.
+    ConstantSeries#babelstat_series{series = ValuesAndDates}.
 
 %%%===================================================================
 %%% Internal functions
@@ -197,8 +198,10 @@ replace(Original, ToReplace, ReplaceWith) ->
 -spec replace_tokens_with_values(Albegra::string(), List::[float()]) -> [string()].					
 replace_tokens_with_values(Algebra,List) ->
     Tokens = string:tokens(Algebra,"()+-/*^"),
-    Lists1 = lists:map(fun(#babelstat_series{ values = Values}) ->
-			       Values
+    %Get the values from the list
+    Lists1 = lists:map(fun(#babelstat_series{ series = Serie}) ->
+			       {_,Value} = Serie,
+			       Value
 		       end, List),
     Transposed = transpose(Lists1),
     R = lists:map(fun(X) ->

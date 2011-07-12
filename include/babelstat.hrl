@@ -47,8 +47,7 @@
 %%The output from shows
 -record(babelstat_series,
 	{
-	  dates :: [calendar:t_datetime1970()],
-	  values :: [float()],
+	  series :: [{calendar:t_datetime1970(),float()}],
 	  metric :: binary(),
 	  scale :: integer(),
 	  frequency :: frequency(),
