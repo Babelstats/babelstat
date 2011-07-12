@@ -52,7 +52,8 @@
       $.evently.connect("#account","#profile", ["loggedIn","loggedOut"]);
       $("#items").evently("items", app);
 
-      var baseurl = "http://192.168.1.69:15984/babelstat/_design/babelstat_common/_view/";
+      var baseurl = "http://localhost:15984/babelstat/_design/babelstat_common/_view/";
+
       $("#categories_drop").append("<option>Select a category</option>");                              
       $.ajax({url: baseurl+"categories?group=true",
              success: function(data){
@@ -63,6 +64,7 @@
                                     }       
              });
       $("#categories_drop").change(function(value,ignore){          
+
           $("#sub_categories_drop").append("<option>Select a sub category</option>"); 
           $.ajax({url: baseurl+'sub_categories?group=true&keys=[\"'+value.target.value+'\"]',
                 success: function(data){
@@ -74,12 +76,46 @@
              });         
       });
       $("#sub_categories_drop").change(function(value,ignore){          
-          var category = $("#categories_drop").target.value;
-          $.ajax({url: baseurl+'subjects?group=true&keys=[\"'+category+'\",\"'+value.target.value+'\"]',
+          $("#subjects_drop").append("<option>Select a subject</option>"); 
+
+          var category_drp = $("#categories_drop");
+          var category = category_drp[0].value
+          var sub_category = value.target.value; 
+          $.ajax({url: baseurl+'subjects?group=true&keys=[\"'+category+'\",\"'+sub_category+'\"]',
                 success: function(data){
                                          var rows = JSON.parse(data).rows;
                                          rows.forEach(function(row){
-                                            $("#sub_categories_drop").append("<option>"+row.value+"</option>");                              
+                                            $("#subjects_drop").append("<option>"+row.value+"</option>");                              
+                                         })
+                                       }       
+             });         
+      });
+      $("#subjects_drop").change(function(value,ignore){          
+          $("#series_categories_drop").empty().append("<option>Select a series category</option>"); 
+
+          var category = $("#categories_drop")[0].value;
+          var sub_category = $("#sub_categories_drop")[0].value; 
+          var subject = value.target.value;
+          $.ajax({url: baseurl+'series_categories?group=true&keys=[\"'+category+'\",\"'+sub_category+'\",\"'+subject+'\"]',
+                success: function(data){
+                                         var rows = JSON.parse(data).rows;
+                                         rows.forEach(function(row){
+                                            $("#series_categories_drop").append("<option>"+row.value+"</option>");                              
+                                         })
+                                       }       
+             });         
+      });
+      $("#series_categories_drop").change(function(value,ignore){          
+          $("#title_drop").empty().append("<option>Select a series</option>"); 
+          var category = $("#categories_drop")[0].value;
+          var sub_category = $("#sub_categories_drop")[0].value; 
+          var subject = $("#subjects_drop")[0].value;
+          var series_category = value.target.value;
+          $.ajax({url: baseurl+'series_categories?group=true&keys=[\"'+category+'\",\"'+sub_category+'\",\"'+subject+'\",\"'+series_category+'\"]',
+                success: function(data){
+                                         var rows = JSON.parse(data).rows;
+                                         rows.forEach(function(row){
+                                            $("#series_categories_drop").append("<option>"+row.value+"</option>");                              
                                          })
                                        }       
              });         

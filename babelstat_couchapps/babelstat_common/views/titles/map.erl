@@ -1,0 +1,3 @@
+fun({Doc}) ->
+  <<"titles">>
+end.
