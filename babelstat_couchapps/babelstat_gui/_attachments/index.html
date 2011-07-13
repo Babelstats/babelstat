@@ -12,45 +12,54 @@
     <h1>BabelStat</h1>
 
     <div id="profile"></div>
+
     <div id="menu">
       <h3>Select your data:</h3>
       <div>
-	Categories</br>
+	<div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">1</P>
+	</div>
 	<select id="categories_drop"></select> 
-      </div>
-      <div>
-	Sub categories</br>
+
+	<div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">2</P>
+	</div>
 	<select id="sub_categories_drop" onchange=></select> 
-      </div>
-      <div>
-	Subjects</br>
+	
+	<div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">3</P>
+	</div>
 	<select id="subjects_drop"></select> 
-      </div>
-      <div>
-	Series categories</br>
+	
+	<div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">4</P>
+	</div>
 	<select id="series_categories_drop"></select> 
-      </div>
-      <div>
-	Series</br>
+	
+	<div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">5</P>
+	</div>
 	<select id="title_drop"></select> 
       </div>
     </div>
     <div id="filter">
       <h3>Set a filter</h3>
       <div>
-	From date</br>
-	<input type="text" id="datepickerFrom" class="datepicker"></input>
-      </div>
-      <div>
-	To date</br>
-	<input type="text" id="datepickerTo" class="datepicker"></input>
-      </div>
-      <div>
-	Frequency</br>
+	<div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">6</P>
+        </div>
+        <input type="text" id="datepickerFrom"></input>
+        <div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">7</P>
+	</div>
+	<input type="text" id="datepickerTo"></input>
+	<div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">8</P>
+	</div>
 	<select id="frequencies_drop"></select>
-      </div>
-      <div>
-	Scale</br>
+	<div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">9</P>
+	</div>
 	<select id="scale_drop">
 	  <option>1</option>
 	  <option>10</option>
@@ -63,14 +72,15 @@
 	  <option>100000000</option>
 	  <option>1000000000</option>
 	</select>      
-      </div>
-      <div>
-	Metrics</br>
+	<div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">10</P>
+	</div>
 	<select id="metrics_drop"></select>
       </div>
     </div>
-    <input type="button" value="Get Data"></input>
     <div id="data">
+      <input type="button" value="Get Data"></input>
+
       This is your data
     </div>
     <div id="items"></div>
