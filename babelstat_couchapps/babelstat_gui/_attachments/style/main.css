@@ -39,6 +39,11 @@ h1 {
     float:left;
     width:10%;
 }
+#filter{
+    float:left;
+    width:10%;
+}
+
 select{
     width:100%;
 }
