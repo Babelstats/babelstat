@@ -7,7 +7,7 @@ fun({Doc}) ->
 		SubCategory = proplists:get_value(<<"sub_category">>, Doc),
 		Subject = proplists:get_value(<<"subject">>, Doc),
 		SeriesCategory = proplists:get_value(<<"series_category">>, Doc),
-                Emit([Category,SubCategory,Subject,SeriesCategory], 1)
+                Emit([Category,SubCategory,Subject],SeriesCategory)
         end
 end.
 
