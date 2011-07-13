@@ -65,27 +65,27 @@
              });
       $("#categories_drop").change(function(value,ignore){          
 
-          $("#sub_categories_drop").append("<option>Select a sub category</option>"); 
+          $("#sub_categories_drop").empty().append("<option>Select a sub category</option>"); 
           $.ajax({url: baseurl+'sub_categories?group=true&keys=[\"'+value.target.value+'\"]',
                 success: function(data){
                                          var rows = JSON.parse(data).rows;
-                                         rows.forEach(function(row){
-                                            $("#sub_categories_drop").append("<option>"+row.value+"</option>");                              
+                                         rows[0].value.forEach(function(row){
+                                            $("#sub_categories_drop").append("<option>"+row+"</option>");                              
                                          })
                                        }       
              });         
       });
       $("#sub_categories_drop").change(function(value,ignore){          
-          $("#subjects_drop").append("<option>Select a subject</option>"); 
+          $("#subjects_drop").empty().append("<option>Select a subject</option>"); 
 
           var category_drp = $("#categories_drop");
           var category = category_drp[0].value
           var sub_category = value.target.value; 
-          $.ajax({url: baseurl+'subjects?group=true&keys=[\"'+category+'\",\"'+sub_category+'\"]',
+          $.ajax({url: baseurl+'subjects?group=true&start_key=[\"'+category+'\",\"'+sub_category+'\"]&end_key=[\"'+category+'\",\"'+sub_category+'\"]',
                 success: function(data){
                                          var rows = JSON.parse(data).rows;
-                                         rows.forEach(function(row){
-                                            $("#subjects_drop").append("<option>"+row.value+"</option>");                              
+                                         rows[0].value.forEach(function(row){
+                                            $("#subjects_drop").append("<option>"+row+"</option>");                              
                                          })
                                        }       
              });         
@@ -96,11 +96,11 @@
           var category = $("#categories_drop")[0].value;
           var sub_category = $("#sub_categories_drop")[0].value; 
           var subject = value.target.value;
-          $.ajax({url: baseurl+'series_categories?group=true&keys=[\"'+category+'\",\"'+sub_category+'\",\"'+subject+'\"]',
+          $.ajax({url: baseurl+'series_categories?group=true&start_key=[\"'+category+'\",\"'+sub_category+'\",\"'+subject+'\"]&end_key=[\"'+category+'\",\"'+sub_category+'\",\"'+subject+'\"]',
                 success: function(data){
                                          var rows = JSON.parse(data).rows;
-                                         rows.forEach(function(row){
-                                            $("#series_categories_drop").append("<option>"+row.value+"</option>");                              
+                                         rows[0].value.forEach(function(row){
+                                            $("#series_categories_drop").append("<option>"+row+"</option>");                              
                                          })
                                        }       
              });         
@@ -111,11 +111,11 @@
           var sub_category = $("#sub_categories_drop")[0].value; 
           var subject = $("#subjects_drop")[0].value;
           var series_category = value.target.value;
-          $.ajax({url: baseurl+'series_categories?group=true&keys=[\"'+category+'\",\"'+sub_category+'\",\"'+subject+'\",\"'+series_category+'\"]',
+          $.ajax({url: baseurl+'titles?group=true&start_key=[\"'+category+'\",\"'+sub_category+'\",\"'+subject+'\",\"'+series_category+'\"]&end_key=[\"'+category+'\",\"'+sub_category+'\",\"'+subject+'\",\"'+series_category+'\"]',
                 success: function(data){
                                          var rows = JSON.parse(data).rows;
-                                         rows.forEach(function(row){
-                                            $("#series_categories_drop").append("<option>"+row.value+"</option>");                              
+                                         rows[0].value.forEach(function(row){
+                                            $("#title_drop").append("<option>"+row+"</option>");                              
                                          })
                                        }       
              });         
