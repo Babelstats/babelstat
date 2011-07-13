@@ -6,7 +6,6 @@ body {
 }
 
 h1 {
-  margin-top:0;
 }
 
 h5{
@@ -36,7 +35,7 @@ p {
 }
 
 #profile {
-  border:2px solid #888943;
+  border: 2px solid #888943;
   background:#CACC7F;
   padding:8px;
   margin-bottom:8px;
@@ -45,14 +44,12 @@ p {
 #items {
   border:1px solid #888943;
   background:#CACC7F;
-  padding:8px;
   width:20%;
   float:right;
 }
 
 #sidebar {
   border:1px solid #888943;
-  padding:8px;
   float:right;
   width:20%;
 }
