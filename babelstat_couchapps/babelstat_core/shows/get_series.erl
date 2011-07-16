@@ -31,7 +31,7 @@ fun(Doc, {Req}) ->
 	
 	babelstat_api:run_query(Query,Filter,fun(Res) -> 	
 						     error_logger:info_msg("Babelstat returned ~p~n",[Res]),
-						     ReturnJson = babelstat_api:result_to_proplist(Res),
+						     {result,ReturnJson} = babelstat_api:result_to_proplist(Res),
 						     error_logger:info_msg("Babelstat converted to ~p~n",[ReturnJson]),
 						     Pid ! {[
 						       {<<"headers">>,
@@ -41,7 +41,7 @@ fun(Doc, {Req}) ->
 							  ]
 							}
 						       },
-						       {<<"json">>,ReturnJson}
+						       {<<"json">>,{[ReturnJson]}}
 							    ]} end),
 	receive
 	    Data ->
