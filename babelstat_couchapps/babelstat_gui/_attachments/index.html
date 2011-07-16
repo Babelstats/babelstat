@@ -209,23 +209,24 @@
              });         
       });
       
-      $("#data_btn").clicked(function() {
+      $("#data_btn").click(function() {
          var base = "http://localhost:15984/babelstat/_design/babelstat_core/_show/get_series?";
          var category = "category=%22"+$("#categories_drop")[0].value+"%22&";
          var sub_category = "sub_category=%22"+$("#sub_categories_drop")[0].value+"%22&"; 
          var subject = "subject=%22"+$("#subjects_drop")[0].value+"%22&";
+         var series_category = "series_category=%22"+$("#series_categories_drop")[0].value+"%22&";
          var title = "title=%22"+$("#title_drop")[0].value+"%22&";
-         var frequency = "frequency="+$("#frequencies_drop")[0].value+"&";
-         var scale = "scale="+$("#scale_drop")[0].value+"&";
-         var metric = "metric=%20"+$("#metric_drop")[0].value+"%20";
-         var calling_url = base+category+sub_category+subject+title+frequency+scale+metric;
+         var frequency = "frequency=%22"+$("#frequencies_drop")[0].value+"%22&";
+         var scale = "scale=%22"+$("#scale_drop")[0].value+"%22&";
+         var metric = "metric=%22"+$("#metrics_drop")[0].value+"%22";
+         var calling_url = base+category+sub_category+subject+series_category+title+frequency+scale+metric;
           $.ajax({url: calling_url,
                 success: function(data){
                                          var json = JSON.parse(data);
                                          console.log(json);
                                        }       
              });         
-      }
+      });
     });
   </script>    
 </html>
