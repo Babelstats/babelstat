@@ -67,9 +67,10 @@ result_to_proplist(#babelstat_series{ series = Series,
      {title, Title},
      {source, Source},
      {legend, Legend}];
+
 result_to_proplist(no_results) ->
-    no_results;
+    {[{<<"result">>,<<"no_results">>}]};
 result_to_proplist(_) ->
-    unknown_results.
+    {[{<<"result">>,<<"unknown_results">>}]}.
 
 

@@ -59,7 +59,7 @@ convert_docs_to_series(#babelstat_query{ category = Category,
 					 title = Title } = Params, 
 		       #babelstat_filter{ metric = Metric,
 					  scale = Scale,
-					  frequency = Frequency} = Filter, {Values, Dates}, Docs) ->
+					  frequency = Frequency} = Filter, {Values, _Dates}, Docs) ->
     {ConvertedValues,_} = lists:foldl(fun(Doc, Acc) ->
 					      {NewValues, Counter} = Acc,
 					      DocScale = Doc#babelstat.scale,
@@ -70,7 +70,7 @@ convert_docs_to_series(#babelstat_query{ category = Category,
 					      {NewValues++[{Doc#babelstat.date,Converted}],Counter+1} 
 		       end,{[],0},Docs),
 
-    #babelstat_series{series = {Dates, ConvertedValues}, metric = Metric, scale = Scale, 
+    #babelstat_series{series = ConvertedValues, metric = Metric, scale = Scale, 
 		      frequency = Frequency, category = Category, sub_category = Sub_Category, 
 		      subject = Subject, series_category = Series_Category, title = Title, 
 		      legend = create_legend(Params,Filter)}.
