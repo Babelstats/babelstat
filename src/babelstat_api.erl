@@ -51,7 +51,7 @@ result_to_proplist(#babelstat_series{ series = Series,
 				      source = Source,
 				      legend = Legend }) ->
     {Dates, Values} = lists:foldl(fun({Date,Value},Acc) ->
-					  {[Dates],[Values]} = Acc,
+					  {Dates,Values} = Acc,
 					  {Dates++[Date],Values++[Value]}
 				  end,{[],[]},Series),
     [{dates, Dates},
