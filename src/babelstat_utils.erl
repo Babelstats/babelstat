@@ -241,3 +241,4 @@ simplify_algebra(Tokens,Calculation) ->
 				replace(Acc,Token,Char)
 			end,Calculation,lists:seq(1,TokenCount))
     end.
+

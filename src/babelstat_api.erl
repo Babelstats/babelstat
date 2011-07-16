@@ -52,7 +52,7 @@ result_to_proplist(#babelstat_series{ series = Series,
 				      legend = Legend }) ->
     {Dates, Values} = lists:foldl(fun({Date,Value},Acc) ->
 					  {Dates,Values} = Acc,
-					  {Dates++[Date],Values++[Value]}
+					  {Dates++[to_iso(Date)],Values++[Value]}
 				  end,{[],[]},Series),
     [{dates, Dates},
      {values, Values},
@@ -74,3 +74,19 @@ result_to_proplist(_) ->
     {[{<<"result">>,<<"unknown_results">>}]}.
 
 
+to_iso({{Year, Month, Day}, {Hour, Minute, Second}}) ->
+    Year0 = create_date_part(Year),
+    Month0 = create_date_part(Month),
+    Day0 = create_date_part(Day),
+    Hour0 = create_date_part(Hour),
+    Minute0 = create_date_part(Minute),
+    Second0 = create_date_part(Second),
+    <<Year0/binary, "-", Month0/binary, "-", Day0/binary, " ", Hour0/binary, ":", Minute0/binary, ":", Second0/binary, "Z">>.
+
+create_date_part(Date) when is_integer(Date) ->
+    create_date_part(integer_to_list(Date));
+create_date_part(Date) when length(Date) =:= 4;
+			    length(Date) =:= 2 ->
+    list_to_binary(Date);
+create_date_part(Date) when length(Date) =:= 1 ->
+    list_to_binary(string:right(Date, 2, $0)).

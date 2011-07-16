@@ -31,21 +31,22 @@ fun(Doc, {Req}) ->
 	
 	babelstat_api:run_query(Query,Filter,fun(Res) -> 	
 						     error_logger:info_msg("Babelstat returned ~p~n",[Res]),
-						     {result,ReturnJson} = babelstat_api:result_to_proplist(Res),
-						     error_logger:info_msg("Babelstat converted to ~p~n",[ReturnJson]),
-						     Pid ! {[
-						       {<<"headers">>,
-							{
-							  [
-							   {<<"Content-Type">>,<<"application/json">>}
-							  ]
-							}
-						       },
-						       {<<"json">>,{[ReturnJson]}}
-							    ]} end),
+						     {result, Series} = Res,
+						     Json = {babelstat_api:result_to_proplist(Series)},
+						     error_logger:info_msg("Babelstat converted to ~p~n",[Json]),
+						     Pid ! Json end),
 	receive
 	    Data ->
 		error_logger:info_msg("Returning from show: ~p~n",[Data]),
-		Data
+		{[
+		  {<<"headers">>,
+		   {
+		     [
+		      {<<"Content-Type">>,<<"application/json">>}
+		     ]
+		   }
+		  },
+		  {<<"json">>,Data}
+		 ]}
 	end 
 end.

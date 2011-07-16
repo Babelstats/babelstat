@@ -53,14 +53,17 @@
 	  <p style="color:white; text-align:center;margin-top: 4.5em">6</P>
         </div>
         <input type="text" id="datepickerFrom"></input>
+
         <div class="circle">
 	  <p style="color:white; text-align:center;margin-top: 4.5em">7</P>
 	</div>
 	<input type="text" id="datepickerTo"></input>
+
 	<div class="circle">
 	  <p style="color:white; text-align:center;margin-top: 4.5em">8</P>
 	</div>
 	<select id="frequencies_drop"></select>
+
 	<div class="circle">
 	  <p style="color:white; text-align:center;margin-top: 4.5em">9</P>
 	</div>
@@ -76,6 +79,7 @@
 	  <option>100000000</option>
 	  <option>1000000000</option>
 	</select>      
+
 	<div class="circle">
 	  <p style="color:white; text-align:center;margin-top: 4.5em">10</P>
 	</div>
@@ -89,7 +93,7 @@
     </div>
 
     <div id="data">
-      <input type="button" value="Get Data"></input>
+      <input type="button" id="data_btn" value="Get Data"></input>
 
       This is your data
     </div>
@@ -204,7 +208,24 @@
                                        }       
              });         
       });
-
+      
+      $("#data_btn").clicked(function() {
+         var base = "http://localhost:15984/babelstat/_design/babelstat_core/_show/get_series?";
+         var category = "category=%22"+$("#categories_drop")[0].value+"%22&";
+         var sub_category = "sub_category=%22"+$("#sub_categories_drop")[0].value+"%22&"; 
+         var subject = "subject=%22"+$("#subjects_drop")[0].value+"%22&";
+         var title = "title=%22"+$("#title_drop")[0].value+"%22&";
+         var frequency = "frequency="+$("#frequencies_drop")[0].value+"&";
+         var scale = "scale="+$("#scale_drop")[0].value+"&";
+         var metric = "metric=%20"+$("#metric_drop")[0].value+"%20";
+         var calling_url = base+category+sub_category+subject+title+frequency+scale+metric;
+          $.ajax({url: calling_url,
+                success: function(data){
+                                         var json = JSON.parse(data);
+                                         console.log(json);
+                                       }       
+             });         
+      }
     });
   </script>    
 </html>
