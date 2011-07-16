@@ -55,7 +55,7 @@ create_docs(Category, SubCategory, Subject, SeriesCategory, Title, Source, Dates
 			  end, DatesAndValues).
     
 create_test_docs(Metric,Scale,Frequency, Title) ->
-    DateList = date_range:create_range({{2000,1,1}, {0,0,0}}, {{2011,7,10}, {0,0,0}}, binary_to_atom(Frequency, latin1)),
+    DateList = date_range:create_range({{2011,1,1}, {0,0,0}}, {{2011,2,1}, {0,0,0}}, binary_to_atom(Frequency, latin1)),
     
     DatesAndValues = lists:map(fun(N) ->    		      
 		      Date = lists:nth(N,DateList),
