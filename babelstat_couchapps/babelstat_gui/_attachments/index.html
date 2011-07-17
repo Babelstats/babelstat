@@ -43,6 +43,10 @@
 	<select id="title_drop"></select> 
       </div>
     </div>
+    <div id="sidebar">
+      <p>Welcome to Babelstat.</p>
+      <p>Select the data you want from the selection box.</p>
+    </div>
 
     <div id="items"></div>
 
@@ -51,21 +55,16 @@
       <div>
 	<div class="circle">
 	  <p style="color:white; text-align:center;margin-top: 4.5em">6</P>
-        </div>
-        <input type="text" id="datepickerFrom"></input>
-
-        <div class="circle">
-	  <p style="color:white; text-align:center;margin-top: 4.5em">7</P>
-	</div>
-	<input type="text" id="datepickerTo"></input>
-
-	<div class="circle">
-	  <p style="color:white; text-align:center;margin-top: 4.5em">8</P>
 	</div>
 	<select id="frequencies_drop"></select>
 
 	<div class="circle">
-	  <p style="color:white; text-align:center;margin-top: 4.5em">9</P>
+	  <p style="color:white; text-align:center;margin-top: 4.5em">7</P>
+	</div>
+	<select id="metrics_drop"></select>
+
+	<div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">8</P>
 	</div>
 	<select id="scale_drop">
 	  <option>1</option>
@@ -81,21 +80,25 @@
 	</select>      
 
 	<div class="circle">
+	  <p style="color:white; text-align:center;margin-top: 4.5em">9</P>
+        </div>
+	<div style="float:left;">
+        <input type="text" id="datepickerFrom"></input>
+	</div>
+        <div class="circle">
 	  <p style="color:white; text-align:center;margin-top: 4.5em">10</P>
 	</div>
-	<select id="metrics_drop"></select>
+	<div style="float:left;">
+	<input type="text" id="datepickerTo"></input>
+	</div>
       </div>
     </div>
 
-    <div id="sidebar">
-      <p>Welcome to Babelstat.</p>
-      <p>Select the data you want from the selection box.</p>
-    </div>
 
     <div id="data">
       <input type="button" id="data_btn" value="Get Data"></input>
-
-      This is your data
+      <div id="container">
+      </div>
     </div>
 
 
@@ -111,7 +114,9 @@
 -->
   </body>  
   <script src="vendor/couchapp/loader.js"></script>
+  <script src="vendor/couchapp/highcharts/js/highcharts.js" type="text/javascript"></script>
   <script type="text/javascript" charset="utf-8">
+    var chart;
     $.couch.app(function(app) {
       $("#account").evently("account", app);
       $("#profile").evently("profile", app);
@@ -221,10 +226,39 @@
          var metric = "metric=%22"+$("#metrics_drop")[0].value+"%22";
          var calling_url = base+category+sub_category+subject+series_category+title+frequency+scale+metric;
           $.ajax({url: calling_url,
-                success: function(data){
-                                         console.log(data);
-                                       }       
+                  success: function(data){
+                                           console.log(data);
+                                           var newData = [];
+                                           for(i = 0; i < data.dates.length;i++){
+							    newData.push([new Date(data.dates[i]).getTime(), data.values[i]]);
+							  };
+					   chart.addSeries({
+                                                             name: data.legend,
+                                                             data: newData
+							  });
+                                         }
              });         
+      });
+
+      chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'container',
+	    zoomtype: 'x'
+        },
+        title: {
+            text: 'Your babelstat data'
+        },
+        xAxis: {
+            type: 'datetime',
+	    maxZoom: 7 * 24 * 3600000 // one week
+        },
+        yAxis: {
+            title: {
+                text: 'Values'
+            },
+	    min: -100,
+   	    showFirstLabel: false							  
+        },
       });
     });
   </script>    
