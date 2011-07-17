@@ -222,8 +222,7 @@
          var calling_url = base+category+sub_category+subject+series_category+title+frequency+scale+metric;
           $.ajax({url: calling_url,
                 success: function(data){
-                                         var json = JSON.parse(data);
-                                         console.log(json);
+                                         console.log(data);
                                        }       
              });         
       });
