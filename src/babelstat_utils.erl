@@ -70,7 +70,6 @@ convert_docs_to_series(#babelstat_query{ category = Category,
 					      Converted = convert_metric(DocMetric, Metric,NewValue),
 					      {NewValues++[{Doc#babelstat.date,Converted}],Counter+1} 
 		       end,{[],0},Docs),
-
     #babelstat_series{series = ConvertedValues, metric = Metric, scale = Scale, 
 		      frequency = Frequency, category = Category, sub_category = Sub_Category, 
 		      subject = Subject, series_category = Series_Category, title = Title}.
