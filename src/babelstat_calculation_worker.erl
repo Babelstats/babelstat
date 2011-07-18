@@ -87,7 +87,7 @@ doing_calculation(start, #state {
 						 {Dates++[Doc#babelstat.date],Values++[Doc#babelstat.value]}     
 					 end,{[],[]},Results),
 	    Results1 = babelstat_utils:convert_docs_to_series(SearchQuery, Filter, {Values,Dates}, Results),
-	    {stop, normal, State#state{ result = {result, Results1} }};
+	    {stop, normal, State#state{ result = {result, Results1#babelstat_series{legend = babelstat_utils:create_legend(SearchQuery,Filter)}} }};
 	no_results ->
 	    {stop, error,  State#state{ result = {error, no_document_found} }}
     end.
@@ -99,6 +99,7 @@ doing_calculation(start, #state {
 				 {next_state, waiting_for_workers, #state{}}.
 waiting_for_workers({error, Error},  State) ->
     {stop, error, State#state{ result = {error, Error}}};
+
 waiting_for_workers({result, NewResults}, #state{result = Results,
 						 workers = 1,
 						 algebra = Algebra,
@@ -122,6 +123,7 @@ waiting_for_workers({result, NewResults}, #state{result = Results,
 					   legend = babelstat_utils:create_legend(Q,F)},
 	{stop, normal, State#state{ result = {result, Results1},
 				    workers = 0 }};
+
 waiting_for_workers({result, NewResult}, #state{ result = Result, 
 					       workers = Workers} = State) ->
     {next_state, waiting_for_workers, State#state{ result = Result ++ [NewResult],
@@ -139,6 +141,7 @@ handle_info(_Info, StateName, State) ->
 
 terminate(error, _, #state { result = Result, callback = Callback }) ->
     Callback(Result);
+
 terminate(normal, _, #state{ result = Result, callback = Callback }) ->
     Callback(Result);
 
