@@ -199,21 +199,24 @@ replace(Original, ToReplace, ReplaceWith) ->
 replace_tokens_with_values(Algebra,List) ->
     Tokens = string:tokens(Algebra,"()+-/*^"),
     %Get the values from the list
-    Lists1 = lists:map(fun(#babelstat_series{ series = Serie}) ->
-			       {_,Value} = Serie,
-			       Value
+    Lists1 = lists:map(fun(#babelstat_series{series = Serie}) ->
+			       lists:map(fun({Date,Value}) ->
+						{Date, Value}
+					 end,Serie)			       
 		       end, List),
     Transposed = transpose(Lists1),
     R = lists:map(fun(X) ->
-			  lists:foldl(fun(Y,Acc) ->
+			  {Date,_} = hd(X),
+			  Folded = lists:foldl(fun({_D,Y},Acc) ->					      
 					      {A,Counter} = Acc,
 					      Token = lists:nth(Counter,Tokens),
 					      Replaced = replace_token_with_value(A, Token, [Y]),
 					      {Replaced,Counter+1}
-				      end,{Algebra, 1},X)			
+				      end,{Algebra, 1},X),		  
+			  {Date,Folded}
 		  end,Transposed),
-    [Result || {Result,_} <- R].
-
+    [{D,Result} || {D,{Result,_}} <- R].
+    
 replace_token_with_value(Original, ToReplace, ReplaceWith) ->
     R = case ReplaceWith of
 	X when is_float(X) ->

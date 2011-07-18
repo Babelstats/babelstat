@@ -21,7 +21,7 @@ eval(Algebra) ->
 
 -spec calculate(Series :: [{calendar:t_datetime1970(),string()}]) -> [{calendar:t_datetime1970(),float()}].
 calculate(Series)->
-    plists:map(fun({Date,Algebra}, 100) ->
-			 Result = babel_calc:eval(Algebra),
-			 {Date,Result}
+    plists:map(fun({Date,Algebra}) ->
+		       Result = babel_calc:eval(Algebra),
+		       {Date,Result}
 	      end, Series).
