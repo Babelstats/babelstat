@@ -105,10 +105,10 @@ waiting_for_workers({result, NewResults}, #state{result = Results,
 						 search_query = #babelstat_query{ category = Category,
 										  subject = Subject,
 										  series_category = SeriesCategory,
-										  title = Title },
+										  title = Title } = Q,
 						 filter = #babelstat_filter{ metric = Metric,
 									     scale = Scale,
-									     frequency = Frequency}
+									     frequency = Frequency} = F
 						} = State) ->
     CalculatedResults = babel_calc:calculate(babelstat_utils:replace_tokens_with_values(Algebra, Results++[NewResults])),
     Results1 = NewResults#babelstat_series{category = Category,
@@ -118,7 +118,8 @@ waiting_for_workers({result, NewResults}, #state{result = Results,
 					   metric = Metric,
 					   scale = Scale,
 					   frequency = Frequency,
-					   series = CalculatedResults},
+					   series = CalculatedResults,
+					   legend = babelstat_utils:create_legend(Q,F)},
 	{stop, normal, State#state{ result = {result, Results1},
 				    workers = 0 }};
 waiting_for_workers({result, NewResult}, #state{ result = Result, 

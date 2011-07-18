@@ -10,7 +10,7 @@
 -include("../include/babelstat.hrl").
 %% API
 -export([transpose/1, date_adjust/6,convert_metric/3, convert_scale/3,convert_docs_to_series/4,create_constants_series/5]).
--export([replace_token_with_value/3,parse_calculation/1,replace_tokens_with_values/2]).
+-export([replace_token_with_value/3,parse_calculation/1,replace_tokens_with_values/2,create_legend/2]).
 
 
 %%%===================================================================
@@ -118,10 +118,10 @@ create_legend(#babelstat_query{ category = Category,
 				series_category = SeriesCategory,
 				title = Title },
 	      #babelstat_filter{ metric = Metric }) ->
-    Sep = <<"-">>,
+    Sep = <<" - ">>,
     Metric0 = <<"(",Metric/binary,")">>,
     <<Category/binary, Sep/binary, SubCategory/binary, Sep/binary, Subject/binary, Sep/binary, SeriesCategory/binary,
-      Sep/binary, Title/binary, Metric0/binary>>.
+      Sep/binary, Title/binary,Sep/binary, Metric0/binary>>.
 
 %%%===================================================================
 %%% Date helper functions
