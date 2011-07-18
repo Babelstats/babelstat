@@ -10,9 +10,10 @@
 -include("../include/babelstat.hrl").
 %% API
 -export([transpose/1, date_adjust/6,convert_metric/3, convert_scale/3,convert_docs_to_series/4,create_constants_series/5]).
--export([replace_token_with_value/3,parse_calculation/1,replace_tokens_with_values/2,create_legend/2]).
+-export([replace_token_with_value/3,parse_calculation/1,replace_tokens_with_values/2,create_legend/2,function_operators/0,is_string_number/1]).
 
-
+function_operators() ->
+    ["pi","sqrt","sin","cos","tan","asin","acos","atan","sinh","cosh","tanh","asinh","acosh", "atanh","exp","log","erf","erfc"].
 %%%===================================================================
 %%% API
 %%%===================================================================
@@ -172,8 +173,25 @@ convert_scale(OriginalScale, NewScale, Value) ->
 -spec parse_calculation(binary()) -> {[#babelstat_query{}], string()}.		       
 parse_calculation(Calculation1) ->
     Calculation = binary_to_list(Calculation1),
-    Tokens = string:tokens(Calculation,"()+-/*^"),
+    TokenList = string:tokens(Calculation,"()+-/*^"),
+    Tokens = lists:foldl(fun(X,Acc) ->
+				 case lists:member(X,function_operators()) of
+				     true ->
+					 Acc;
+				     false ->
+					 case is_string_number(X) of 
+					     true ->
+						 Acc;
+					     false ->
+						 Acc++[X]
+					 end
+				 end 
+			 end,[],TokenList),
+			    
+    error_logger:info_msg("TokenList ~p~n",[TokenList]),
+    error_logger:info_msg("Tokens ~p~n",[Tokens]),
     PrettyAlgebra = simplify_algebra(Tokens,Calculation),
+    error_logger:info_msg("Pretty ~p~n",[PrettyAlgebra]),
     Queries = lists:map(fun(Token) ->
 				Items = string:tokens(Token,"{,}"),
 				{C,SuC,Subj,Sc,T} = list_to_tuple(Items),
@@ -186,6 +204,19 @@ parse_calculation(Calculation1) ->
 			end,Tokens),
     {Queries, PrettyAlgebra}.
     
+is_string_number(X) ->
+    case catch list_to_integer(X) of
+	{'EXIT',_} ->
+	    case catch list_to_float(X) of
+		{'EXIT',_} ->
+		    false;
+		_ ->
+		    true
+	    end;
+	_ ->
+	    true
+    end.
+
 -spec replace(string(),string(), string()) -> string().
 replace(Original, ToReplace, ReplaceWith) ->
     Index = string:str(Original,ToReplace),
